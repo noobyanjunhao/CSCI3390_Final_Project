@@ -1,0 +1,58 @@
+# Data folder
+data/
+datasets/
+
+# Spark and Scala specific
+*.class
+*.log
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+.history
+.cache
+.lib/
+
+# sbt specific
+.cache/
+.history/
+.lib/
+dist/*
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+
+# IDE specific files
+.scala_dependencies
+.worksheet
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea_modules/
+.classpath
+.project
+.settings/
+.metals/
+.bloop/
+.bsp/
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.swp
+*~
+
+# Output directories
+output/
+out/
