@@ -46,21 +46,19 @@ output file folder: https://drive.google.com/drive/folders/1FyJJge94jaOqw5D8AISV
 - **Repeat** until no active vertices remain.  
 - **Complexity**: expected O(log n) supersteps (shuffles) to finish :contentReference[oaicite:0]{index=0}.  
 - **Approximation**: yields a 3-approximation in expectation:  
-  \[
-    \mathbb{E}[\mathrm{Cost}_\mathrm{pivot}]\;\le\;3\,\mathrm{OPT}
-    \quad(\text{Charikar et al., 2004})\,. 
-  \]
+  E[Cost_pivot]\;<=\;3 OPT
+     (Charikar et al., 2004) . 
+
 
 ### 2. Greedy Local-Move Refinement
 
 - **Multiset**: for each v, collect \((\,\text{targetCluster},\;\#\text{pos-edges}\)) pairs.  
 - **Δ-cost**  
-  \[
-    \Delta(v\!\to T)
-    = (\text{pos to }T)
-    - (\lvert T\rvert - \text{pos to }T)
-    - (\lvert C_v\rvert - \text{pos to }C_v)
-  \]
+  Δ(v\!→ T)
+    = (pos to T)
+    - (| T| - pos to T)
+    - (| C_v| - pos to C_v)
+
 - **Sweep**: in each pass, process every vertex in some order, move it if Δ < 0.  
 - **Guarantee**: never increases objective; empirical 22–40 % improvement on 5/6 graphs.  
 
