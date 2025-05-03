@@ -44,20 +44,18 @@ output file folder: https://drive.google.com/drive/folders/1FyJJge94jaOqw5D8AISV
 - **Pregel supersteps**: a vertex becomes a pivot if it has the smallest key among its active positive neighbors.  
 - **Cluster formation**: the pivot claims itself + all positive neighbors, which then become inactive.  
 - **Repeat** until no active vertices remain.  
-- **Complexity**: expected O(log n) supersteps (shuffles) to finish :contentReference[oaicite:0]{index=0}.  
+- **Complexity**: expected O(log n) supersteps (shuffles) to finish
 - **Approximation**: yields a 3-approximation in expectation:  
-  E[Cost_pivot]\;<=\;3 OPT
-     (Charikar et al., 2004) . 
+  E[Cost_pivot] ≤ 3 · OPT (Charikar et al., 2004)
 
 
 ### 2. Greedy Local-Move Refinement
 
 - **Multiset**: for each v, collect \((\,\text{targetCluster},\;\#\text{pos-edges}\)) pairs.  
 - **Δ-cost**  
-  Δ(v\!→ T)
-    = (pos to T)
-    - (| T| - pos to T)
-    - (| C_v| - pos to C_v)
+  Δ(v → T) = (# pos-edges to T)
+           - (|T| - # pos-edges to T)
+           - (|C_v| - # pos-edges to C_v)
 
 - **Sweep**: in each pass, process every vertex in some order, move it if Δ < 0.  
 - **Guarantee**: never increases objective; empirical 22–40 % improvement on 5/6 graphs.  
