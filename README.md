@@ -18,12 +18,12 @@ This repository contains our implementation of the correlation clustering task f
 
 | Input File                   | #Edges      | #Clusters | Disagreements | Runtime | Environment                |
 | ---------------------------- | ----------- | --------- | ------------- | ------- | -------------------------- |
-| com-orkut.ungraph.csv        | 117,185,083 | TBD       | 59853768367           | 2873.851 s     | 1x2 n1-standard-4 CPUs|
-| twitter\_original\_edges.csv | 63,555,749  | 4807218       | 30974248888       |  3106.234s    | 1x4 n1-standard-4 CPUs|
-| soc-LiveJournal1.csv         | 42,851,237  | TBD       | 49084549           | 2294.387 s     | 1x2 n1-standard-4 CPUs |
-| soc-pokec-relationships.csv  | 22,301,964  | TBD       | 25803597           | 11147.959 s     | 1x2 n1-standard-4 CPUs |
-| musae\_ENGB\_edges.csv       | 35,324      | TBD       | 51673           |  45.307s      | 1x2 n1-standard-4 CPUs |
-| log\_normal\_100.csv         | 2,671       | TBD       | 1776           | 30.413s     | 1x2 n1-standard-4 CPUs |
+| com-orkut.ungraph.csv        | 117,185,083 | TBD       | 59,853,768,367           | 2873.851 s     | 1x2 n1-standard-4 CPUs|
+| twitter\_original\_edges.csv | 63,555,749  | 4807218       | 30,974,248,888       |  3106.234s    | 1x4 n1-standard-4 CPUs|
+| soc-LiveJournal1.csv         | 42,851,237  | TBD       | 49,084,549           | 2294.387 s     | 1x2 n1-standard-4 CPUs |
+| soc-pokec-relationships.csv  | 22,301,964  | TBD       | 25,803,597           | 11147.959 s     | 1x2 n1-standard-4 CPUs |
+| musae\_ENGB\_edges.csv       | 35,324      | TBD       | 51,673           |  45.307s      | 1x2 n1-standard-4 CPUs |
+| log\_normal\_100.csv         | 2,671       | TBD       | 1,776           | 30.413s     | 1x2 n1-standard-4 CPUs |
 
 ---
 
