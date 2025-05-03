@@ -51,7 +51,7 @@ output file folder: https://drive.google.com/drive/folders/1FyJJge94jaOqw5D8AISV
 
 ### 2. Greedy Local-Move Refinement
 
-- **Multiset**: for each v, collect ( targetCluster,\;\#pos-edges) pairs.  
+- **Multiset**: for each v, collect ( targetCluster,\#pos-edges) pairs.  
 - **Δ-cost**  
   Δ(v → T) = (# pos-edges to T)
            - (|T| - # pos-edges to T)
