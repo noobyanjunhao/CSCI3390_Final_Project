@@ -16,10 +16,10 @@ This repository contains our implementation of the correlation clustering task f
 
 ### Objective Table
 
-| Input File                   | #Edges      | #Vertices | Disagreements | Runtime | Environment                |
+| Input File                   | #Edges      | #Clusters | Disagreements | Runtime | Environment                |
 | ---------------------------- | ----------- | --------- | ------------- | ------- | -------------------------- |
 | com-orkut.ungraph.csv        | 117,185,083 | TBD       | 59853768367           | 2873.851 s     | gcp |
-| twitter\_original\_edges.csv | 63,555,749  | TBD       | 129465413       |  2669.818    | gcp |
+| twitter\_original\_edges.csv | 63,555,749  | 4807218       | 30974248888       |  3106.234s    | 1x4 n1-standard-4 CPUs|
 | soc-LiveJournal1.csv         | 42,851,237  | TBD       | 49084549           | 2294.387 s     | gcp |
 | soc-pokec-relationships.csv  | 22,301,964  | TBD       | 25803597           | 11147.959 s     | gcp |
 | musae\_ENGB\_edges.csv       | 35,324      | TBD       | 51673           |  45.307s      | gcp |
