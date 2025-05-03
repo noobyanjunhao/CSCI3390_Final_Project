@@ -18,12 +18,12 @@ This repository contains our implementation of the correlation clustering task f
 
 | Input File                   | #Edges      | #Vertices | Disagreements | Runtime | Environment                |
 | ---------------------------- | ----------- | --------- | ------------- | ------- | -------------------------- |
-| com-orkut.ungraph.csv        | 117,185,083 | TBD       | TBD           | TBD     | TBD |
-| twitter\_original\_edges.csv | 63,555,749  | TBD       | TBD           | TBD     | TBD |
-| soc-LiveJournal1.csv         | 42,851,237  | TBD       | TBD           | TBD     | TBD |
-| soc-pokec-relationships.csv  | 22,301,964  | TBD       | TBD           | TBD     | TBD |
-| musae\_ENGB\_edges.csv       | 35,324      | TBD       | TBD           | TBD     | TBD |
-| log\_normal\_100.csv         | 2,671       | TBD       | TBD           | TBD     | TBD |
+| com-orkut.ungraph.csv        | 117,185,083 | TBD       | 59853768367           | 2873.851 s     | gcp |
+| twitter\_original\_edges.csv | 63,555,749  | TBD       | 129465413       |  2669.818    | gcp |
+| soc-LiveJournal1.csv         | 42,851,237  | TBD       | 49084549           | 2294.387 s     | gcp |
+| soc-pokec-relationships.csv  | 22,301,964  | TBD       | 25803597           | 11147.959 s     | gcp |
+| musae\_ENGB\_edges.csv       | 35,324      | TBD       | 51673           |  45.307s      | gcp |
+| log\_normal\_100.csv         | 2,671       | TBD       | 1776           | 30.413s     | gcp |
 
 ---
 
