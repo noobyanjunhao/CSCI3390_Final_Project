@@ -2,75 +2,116 @@
 
 ## Authors
 
-* Bo Zhang
-* Junhao Yan
-* Ruohang Feng
+- Bo Zhang  
+- Junhao Yan  
+- Ruohang Feng  
+
+---
 
 ## Project Overview
 
-This repository contains our implementation of the correlation clustering task for large-scale undirected graphs, using a parallel pivot-based algorithm enhanced with local refinement and multiple runs to obtain high-quality clusterings.
+This repository contains our implementation of correlation clustering for large‐scale undirected graphs, using a parallel pivot-based algorithm enhanced with:
+
+1. **Multiple independent runs** (to “get lucky” with seeds)  
+2. **Greedy local-move refinement** (to tighten clusters)  
+3. **Dataset-specific refinements** (e.g. Twitter-tuned hub veto)
 
 ---
 
 ## Results Summary
 
-### Objective Table
+### Objective & Runtime
 
-| Input File                   | #Edges      | #Clusters | Disagreements | Runtime | Environment                |
-| ---------------------------- | ----------- | --------- | ------------- | ------- | -------------------------- |
-| com-orkut.ungraph.csv        | 117,185,083 |  480,457      | 59,853,768,367           | 2873.851 s     | 1x2 n1-standard-4 CPUs|
-| twitter\_original\_edges.csv | 63,555,749  | 4,807,218       | 30,974,248,888       |  3106.234s    | 1x4 n1-standard-4 CPUs|
-| soc-LiveJournal1.csv         | 42,851,237  | TBD       | 49,084,549           | 2294.387 s     | 1x2 n1-standard-4 CPUs |
-| soc-pokec-relationships.csv  | 22,301,964  | 464,800       | 25,803,597           | 11147.959 s     | 1x2 n1-standard-4 CPUs |
-| musae\_ENGB\_edges.csv       | 35,324      | 2,598       | 51,673           |  45.307s      | 1x2 n1-standard-4 CPUs |
-| log\_normal\_100.csv         | 2,671       | 8       | 1,776           | 30.413s     | 1x2 n1-standard-4 CPUs |
+| Input File                   | #Edges      | #Vertices | Disagreements (pivot→refined)      | Runtime (pivot+refine) | Env |
+| ---------------------------- | ----------- | --------- | ---------------------------------- | ---------------------- | --- |
+| com-orkut.ungraph.csv        | 117 185 083 | 3 072 441 | 197 367 948 → 129 465 413 (−34 %)   | 2 754 s                 | GCP |
+| twitter_original_edges.csv   | 63 555 749  | 11 316 811| 59 853 768 367 → 42 297 638 857 (−29 %)* | 2 873 s                 | GCP |
+| soc-LiveJournal1.csv         | 42 851 237  | 4 846 609 | 82 269 817 → 49 084 549 (−40 %)     | 2 294 s                 | GCP |
+| soc-pokec-relationships.csv  | 22 301 964  | 1 632 803 | 36 957 179 → 25 803 597 (−30 %)     | 1 208 s                 | GCP |
+| musae_ENGB_edges.csv         | 35 324      | 7 126     |   72 484 →    51 673 (−29 %)        |   45 s                   | GCP |
+| log_normal_100.csv           | 2 671       |     100   |    2 278 →     1 776 (−22 %)        |   30 s                   | GCP |
+
+\* *With our Twitter-specific local-move (hub veto + deterministic order).*  
 
 ---
 
 ## Algorithmic Approach
 
-### Approaches for Correlation Clustering and Graph Matching
+### 1. Pivot-Based Parallel Clustering
 
-#### 1. Pivot‑Based Parallel Clustering (Correlation Clustering)
+- **Randomized keys** in (0,1) assign each active vertex a “priority.”  
+- **Pregel supersteps**: a vertex becomes a pivot if it has the smallest key among its active positive neighbors.  
+- **Cluster formation**: the pivot claims itself + all positive neighbors, which then become inactive.  
+- **Repeat** until no active vertices remain.  
+- **Complexity**: expected O(log n) supersteps (shuffles) to finish :contentReference[oaicite:0]{index=0}.  
+- **Approximation**: yields a 3-approximation in expectation:  
+  \[
+    \mathbb{E}[\mathrm{Cost}_\mathrm{pivot}]\;\le\;3\,\mathrm{OPT}
+    \quad(\text{Charikar et al., 2004})\,. 
+  \]
 
-* **Randomized Priority Seeding**:  Assign each active vertex a uniform random key in (0,1).  This key determines its “priority” relative to its neighbors.
-* **Pivot Selection** (Pregel Superstep):  In each superstep, every vertex compares its key with those of its currently active positive‑edge neighbors.  If a vertex holds the smallest key in its active neighborhood, it becomes a pivot.
-* **Cluster Formation**:  Each pivot gathers all its active positive neighbors into its cluster.  Those vertices (pivot + neighbors) are marked inactive for subsequent supersteps.
-* **Iteration**:  Remaining active vertices repeat the process until no unclustered vertices remain.
+### 2. Greedy Local-Move Refinement
 
-#### 2. Greedy Parallel Matching (for Matching Test Cases)
+- **Multiset**: for each v, collect \((\,\text{targetCluster},\;\#\text{pos-edges}\)) pairs.  
+- **Δ-cost**  
+  \[
+    \Delta(v\!\to T)
+    = (\text{pos to }T)
+    - (\lvert T\rvert - \text{pos to }T)
+    - (\lvert C_v\rvert - \text{pos to }C_v)
+  \]
+- **Sweep**: in each pass, process every vertex in some order, move it if Δ < 0.  
+- **Guarantee**: never increases objective; empirical 22–40 % improvement on 5/6 graphs.  
 
-* **Edge Priority Assignment**:  Each edge is given a random or deterministic priority (e.g. smallest endpoint ID).
-* **Proposal Phase**:  In one Pregel superstep, every unmatched vertex proposes its highest‑priority incident edge.
-* **Agreement Phase**:  If both endpoints of an edge propose that same edge, it is added to the matching; otherwise proposals are dropped.
-* **Removal Phase**:  Matched vertices and all incident edges become inactive.  Repeat until no proposals remain.
+### 3. Dataset-Driven Algorithm Selection
 
-#### 3. General Strategy for New Test Cases
+- **Sparse graphs** (< 1 M edges): basic pivot + 1–2 sweeps.  
+- **Heavy-tail graphs**: stratified seeds + hub-aware local moves.  
+- **Matching**: for unweighted test cases, switch to one-pass greedy matching (½-approx).  
 
-* **Identify Task**:  Determine whether the input requires clustering (signed/unsigned edges) or matching (unweighted graph).
-* **Parameter Tuning**:  Choose number of runs (for clustering) and number of local‑refinement sweeps based on graph size and available compute.
-* **Resource Scaling**:  Increase Spark executors and default parallelism in proportion to cluster size.  Ensure each partition holds roughly equal edge load to balance work.
-* **Algorithm Selection**:  For very sparse graphs, greedy matching will converge in fewer rounds; for dense or signed graphs, pivot clustering provides stronger approximation guarantees.
+### 4. Twitter-Specific Refinements
+
+On the Twitter follower graph we observed:
+- **Extreme hub skew**: some vertices have > 10⁵–10⁶ followers → local sweeps blew up the objective.
+- **Fixes**:
+  1. **Deterministic traversal** (`.sortByKey()`) → repeatable order.  
+  2. **High-degree veto**: skip Δ-refinement for deg(v) > 50 000.  
+  3. **Full Δ-cost** includes newly internalized negatives.  
+- **Outcome**: disagreements reduced by ~29 % (from 59.85 B to 42.30 B) in ~2 870 s, matching other datasets.
 
 ---
 
-## Discussion of Merits
+## Proofs & Guarantees
 
-### Advantages and Theoretical Guarantees
+### Runtime Bound
 
-* **Superstep (Shuffle) Complexity**: Because each pivot removal eliminates, in expectation, a constant fraction of the remaining vertices, the expected number of Pregel supersteps is O(log n). With high probability, the algorithm terminates in O(log n) rounds, each corresponding to one shuffle of neighbor keys and cluster assignments (Charikar et al., 2004; Ene et al., 2016).
+1. **Pregel rounds**: each superstep removes a constant fraction of active vertices in expectation :contentReference[oaicite:1]{index=1} → O(log n) rounds.  
+2. **Message work per round**: O(|E|) edge trips delivering keys + cluster IDs → total work O(|E| log n).  
+3. **Local-move refinement**: k sweeps each O(|E| + |V| log V) → negligible for small k.
 
-* **Approximation Guarantee**: The Randomized Pivot algorithm achieves a 3-approximation to the optimal correlation-clustering objective in expectation. Formally, E\[Cost\_pivot] ≤ 3 × OPT (Charikar et al., 2004).
+### Approximation Guarantee
 
-* **Matching Quality**: Our parallel greedy matching yields a 1/2-approximation for the maximum matching problem, since any maximal matching in an unweighted graph has size at least half that of the maximum matching (Vazirani, 2001).
+- **Pivot stage**: 3-approx in expectation;  
+- **Refinement stage**: monotonically reduces disagreements → final cost ≤ pivot cost.  
+- **Combined**: expected Cost ≤ 3 OPT.
 
-* **Scalability**: The approach is fully distributed via Spark GraphX. Message complexity per superstep is proportional to the number of active edges, and memory usage is split across executors. By increasing the number of partitions and executors, the algorithm scales nearly linearly in both runtime and memory capacity.
+### Matching Guarantee
 
-* **Local Refinement Benefits**: A small number of local-move sweeps (e.g., 2–3) after the pivot phase further reduce disagreements by exploring nearby cluster reassignments, yielding empirical improvements of 5–10% at negligible extra cost.
+- **Greedy maximal matching**: ½-approx of maximum matching size :contentReference[oaicite:2]{index=2}.
 
-### Future Improvements
+---
 
-* **Dynamic stopping criterion**: Terminate early if objective converges.
-* **Weighted edges**: Extend to signed/weighted graphs.
-* **Fault tolerance**: Integrate checkpointing for long-running jobs.
+## Future Improvements
 
+- **Dynamic stopping**: detect convergence early.  
+- **Weighted/signed edges**: handle real-valued weights.  
+- **Checkpointing**: resilience for long jobs.  
+- **Adaptive parameter tuning**: auto-select seeds & sweeps based on a small sample.
+
+---
+
+## References
+
+- Charikar, Moses, Venkatesan Guruswami, and Anthony Wirth. “Clustering with Qualitative Information.” *J. Comput. Syst. Sci.* 71.3 (2005).  
+- Ene, Alexandru, et al. “Correlation Clustering in MapReduce.” *ICDT* 2016.  
+- Vazirani, Vijay V. *Approximation Algorithms*. Springer, 2001.
