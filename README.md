@@ -82,7 +82,7 @@ On the Twitter follower graph we observed:
 
 ### Runtime Bound
 
-1. **Pregel rounds**: each superstep removes a constant fraction of active vertices in expectation :contentReference[oaicite:1]{index=1} → O(log n) rounds.  
+1. **Pregel rounds**: each superstep removes a constant fraction of active vertices in expectation → O(log n) rounds.  
 2. **Message work per round**: O(|E|) edge trips delivering keys + cluster IDs → total work O(|E| log n).  
 3. **Local-move refinement**: k sweeps each O(|E| + |V| log V) → negligible for small k.
 
@@ -94,7 +94,7 @@ On the Twitter follower graph we observed:
 
 ### Matching Guarantee
 
-- **Greedy maximal matching**: ½-approx of maximum matching size :contentReference[oaicite:2]{index=2}.
+- **Greedy maximal matching**: ½-approx of maximum matching size.
 
 ---
 
