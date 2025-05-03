@@ -32,6 +32,7 @@ This repository contains our implementation of correlation clustering for largeâ
 | log\_normal\_100.csv         | 2,671       | 8       | 1,776           | 30.413s     | 1x2 n1-standard-4 CPUs |
 
 \* *With our Twitter-specific local-move (hub veto + deterministic order).*  
+output file folder: https://drive.google.com/drive/folders/1FyJJge94jaOqw5D8AISVMXZ-9PK-ZKnK?usp=sharing
 
 ---
 
