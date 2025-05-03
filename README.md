@@ -22,14 +22,14 @@ This repository contains our implementation of correlation clustering for large�
 
 ### Objective & Runtime
 
-| Input File                   | #Edges      | #Vertices | Disagreements (pivot→refined)      | Runtime (pivot+refine) | Env |
-| ---------------------------- | ----------- | --------- | ---------------------------------- | ---------------------- | --- |
-| com-orkut.ungraph.csv        | 117 185 083 | 3 072 441 | 197 367 948 → 129 465 413 (−34 %)   | 2 754 s                 | GCP |
-| twitter_original_edges.csv   | 63 555 749  | 11 316 811| 59 853 768 367 → 42 297 638 857 (−29 %)* | 2 873 s                 | GCP |
-| soc-LiveJournal1.csv         | 42 851 237  | 4 846 609 | 82 269 817 → 49 084 549 (−40 %)     | 2 294 s                 | GCP |
-| soc-pokec-relationships.csv  | 22 301 964  | 1 632 803 | 36 957 179 → 25 803 597 (−30 %)     | 1 208 s                 | GCP |
-| musae_ENGB_edges.csv         | 35 324      | 7 126     |   72 484 →    51 673 (−29 %)        |   45 s                   | GCP |
-| log_normal_100.csv           | 2 671       |     100   |    2 278 →     1 776 (−22 %)        |   30 s                   | GCP |
+| Input File                   | #Edges      | #Clusters | Disagreements | Runtime | Environment                |
+| ---------------------------- | ----------- | --------- | ------------- | ------- | -------------------------- |
+| com-orkut.ungraph.csv        | 117,185,083 |  480,457      | 59,853,768,367           | 2873.851 s     | 1x2 n1-standard-4 CPUs|
+| twitter\_original\_edges.csv | 63,555,749  | 4,807,218       | 30,974,248,888       |  3106.234s    | 1x4 n1-standard-4 CPUs|
+| soc-LiveJournal1.csv         | 42,851,237  | 1,717,969       | 49,084,549           | 2294.387 s     | 1x2 n1-standard-4 CPUs |
+| soc-pokec-relationships.csv  | 22,301,964  | 464,800       | 25,803,597           | 11147.959 s     | 1x2 n1-standard-4 CPUs |
+| musae\_ENGB\_edges.csv       | 35,324      | 2,598       | 51,673           |  45.307s      | 1x2 n1-standard-4 CPUs |
+| log\_normal\_100.csv         | 2,671       | 8       | 1,776           | 30.413s     | 1x2 n1-standard-4 CPUs |
 
 \* *With our Twitter-specific local-move (hub veto + deterministic order).*  
 
