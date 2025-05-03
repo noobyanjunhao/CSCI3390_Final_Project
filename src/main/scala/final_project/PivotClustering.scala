@@ -9,7 +9,7 @@ import scala.util.control.Breaks._
 
 /**
  *  Parallel pivot-based correlation clustering.
- *
+ *  This is the code we ran for the five smaller dataset
  *  How it works (BBC 2004, 3-approximation):
  *    1.  Give every still–unclustered vertex a random priority key in (0,1).
  *    2.  A vertex whose key is the smallest among itself and all POSITIVE neighbours

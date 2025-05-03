@@ -50,6 +50,10 @@ object clustering_verifier{
       sys.exit(1)      
     }
 
+    // Count the number of distinct clusters
+    val numClusters = graph_vertices.map(_._2).distinct().count()
+    println(s"Number of clusters in the solution: $numClusters")
+
     val graph_vertices2 = graph_vertices.map(x => (x._2,x._1))
     val graph_vertices3 = graph_vertices2.join(graph_vertices.map(x => (x._2, 1L)).reduceByKey(_+_)).map({case (a,x) => (x._1,(a,x._2))})
 
